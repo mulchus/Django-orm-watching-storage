@@ -1,8 +1,25 @@
 import os
+from environs import Env
+
+
+env = Env()
+env.read_env()
+
+SECRET_KEY = env('SECRET_KEY')
+DATABASES = {
+    'default': {
+        'ENGINE': env('ENGINE'),
+        'HOST': env('HOST'),
+        'PORT': env('PORT'),
+        'NAME': env('NAME'),
+        'USER': env('USER'),
+        'PASSWORD': env('PASSWORD'),
+    }
+}
 
 INSTALLED_APPS = ['datacenter']
 
-DEBUG = True
+DEBUG = env.bool('DEBUG')
 
 ROOT_URLCONF = 'project.urls'
 
