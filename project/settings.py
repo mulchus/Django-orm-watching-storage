@@ -6,41 +6,22 @@ import dj_database_url
 env = Env()
 env.read_env()
 
-SECRET_KEY = env('SECRET_KEY')
-
-db_config = env('db_config')
+SECRET_KEY = env('SECRET_KEY', 'REPLACE_ME')
 
 DATABASES = {
-    'default': db_config,
+    'default': dj_database_url.config(
+        conn_max_age=600,
+        conn_health_checks=True,
+    ),
 }
-
-
-# DB_ENGINE = 'django.db.backends.postgresql_psycopg2'
-# DB_HOST = 'checkpoint.devman.org'
-# DB_PORT = '5434'
-# DB_NAME = 'checkpoint'
-# DB_USER = 'guard'
-# DB_PASSWORD = 'osim5'
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': env('ENGINE'),
-#         'HOST': env('HOST'),
-#         'PORT': env('PORT'),
-#         'NAME': env('NAME'),
-#         'USER': env('USER'),
-#         'PASSWORD': env('PASSWORD'),
-#     }
-# }
 
 INSTALLED_APPS = ['datacenter']
 
-DEBUG = env.bool('DEBUG')
+DEBUG = env.bool('DEBUG', 'False')
 
 ROOT_URLCONF = 'project.urls'
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', '127.0.0.1')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES = [
@@ -50,7 +31,6 @@ TEMPLATES = [
         'APP_DIRS': True,
     },
 ]
-
 
 USE_L10N = True
 
